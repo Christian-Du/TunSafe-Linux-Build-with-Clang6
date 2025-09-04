@@ -109,8 +109,6 @@ time make -j $(nproc)
 
 ## Step 5: Install Clang 6.0
 
-**Important:** This guide assumes you want only one Clang installation on your system. While having multiple Clang versions is absolutely possible, this guide doesn't cover managing multiple installations - if you need that, you'll have to figure out the setup yourself and adapt the following TunSafe compilation steps accordingly.
-
 After the build completes successfully, install Clang system-wide:
 ```bash
 sudo make install
