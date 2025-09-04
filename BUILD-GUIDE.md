@@ -95,7 +95,7 @@ cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles
 
 The compilation process is extremely resource-intensive and time-consuming. Build times tested:
 - **Older 2c/4t i5**: Over 1 hour
-- **Ryzen 5900HX 8c/16t**: Approximately 25 minutes
+- **Ryzen 5900HX 8c/16t**: Approximately 27 minutes
 
 Start the build process using all available CPU cores:
 ```bash
@@ -115,3 +115,107 @@ After the build completes successfully, install Clang system-wide:
 ```bash
 sudo make install
 ```
+
+## Step 6: Download and Build TunSafe
+
+Now we continue with a modified version of the [official TunSafe Linux guide](https://tunsafe.com/user-guide/linux).
+
+Download TunSafe source code:
+```bash
+git clone https://github.com/TunSafe/TunSafe.git
+cd TunSafe
+```
+
+Verify that Clang 6.0 is properly installed:
+```bash
+$ clang --version
+clang version 6.0.1 
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/local/bin
+```
+
+## Step 7: Fix TunSafe Build Script
+
+If you try to build now, you'll get an error:
+```bash
+$ make
+sh ./build_linux.sh
+./build_linux.sh: line 8: clang++-6.0: command not found
+make: *** [Makefile:7: tunsafe] Error 127
+```
+
+This happens because the build script looks for `clang++-6.0` but our installation uses `clang++`.
+
+Edit the build script:
+```bash
+vim build_linux.sh  # or use your preferred editor
+```
+
+**Original script:**
+```bash
+#!/bin/sh
+set -e
+
+RELARGS="-O3 -DNDEBUG"
+DBGARGS="-g -D_DEBUG"
+CURARGS="$RELARGS"
+
+clang++-6.0 -c -march=skylake-avx512 crypto/poly1305/poly1305-x64-linux.s crypto/chacha20/chacha20-x64-linux.s
+clang++-6.0 -I . $CURARGS -DWITH_NETWORK_BSD=1 -mssse3 -pthread -lrt -o tunsafe \
+tunsafe_amalgam.cpp \
+crypto/aesgcm/aesni_gcm-x64-linux.s \
+crypto/aesgcm/aesni-x64-linux.s \
+crypto/aesgcm/ghash-x64-linux.s \
+chacha20-x64-linux.o \
+poly1305-x64-linux.o \
+```
+
+**Modified script (replace `clang++-6.0` with `clang++`):**
+```bash
+#!/bin/sh
+set -e
+
+RELARGS="-O3 -DNDEBUG"
+DBGARGS="-g -D_DEBUG"
+CURARGS="$RELARGS"
+
+clang++ -c -march=skylake-avx512 crypto/poly1305/poly1305-x64-linux.s crypto/chacha20/chacha20-x64-linux.s
+clang++ -I . $CURARGS -DWITH_NETWORK_BSD=1 -mssse3 -pthread -lrt -o tunsafe \
+tunsafe_amalgam.cpp \
+crypto/aesgcm/aesni_gcm-x64-linux.s \
+crypto/aesgcm/aesni-x64-linux.s \
+crypto/aesgcm/ghash-x64-linux.s \
+chacha20-x64-linux.o \
+poly1305-x64-linux.o \
+```
+
+## Step 8: Build and Install TunSafe
+
+Build TunSafe:
+```bash
+make
+```
+
+Install TunSafe system-wide:
+```bash
+sudo make install
+```
+
+## Step 9: Verify Installation
+
+Verify that TunSafe has been successfully installed:
+
+Check TunSafe version:
+```bash
+$ tunsafe --version
+TunSafe 1.5-rc2 
+```
+
+Verify installation location:
+```bash
+$ which tunsafe
+/usr/bin/tunsafe
+```
+
+**Congratulations!** You have successfully compiled Clang 6.0 from source and used it to build TunSafe on your Linux system.
