@@ -44,12 +44,12 @@ Navigate to the LLVM project repository at the 6.x release branch:
 2. Select **"Download ZIP"** 
 3. Copy the download link for use with wget
 
+![LLVM Download Screenshot](https://github.com/user-attachments/assets/57edf9ab-93c2-4027-ad85-c3c3ce78423f)
+
 The download URL should be:
 ```
 https://github.com/llvm/llvm-project/archive/refs/heads/release/6.x.zip
 ```
-
-![LLVM Download Screenshot](https://github.com/user-attachments/assets/57edf9ab-93c2-4027-ad85-c3c3ce78423f)
 
 ## Step 2: Download and Extract LLVM Source
 
@@ -84,7 +84,7 @@ mkdir build
 cd build/
 ```
 
-Configure the build with cmake (following the official [LLVM getting started guide](https://clang.llvm.org/get_started.html) with convenience modifications):
+Configure the build with cmake (following the official [LLVM getting started guide](https://clang.llvm.org/get_started.html)):
 ```bash
 cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm
 ```
@@ -94,7 +94,7 @@ cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles
 **⚠️ WARNING: This step takes a very long time!**
 
 The compilation process is extremely resource-intensive and time-consuming. Build times tested:
-- **Older 2c/4t i5**: Over 1 hour
+- **Older i5 2c/4t**: Over 1 hour
 - **Ryzen 5900HX 8c/16t**: Approximately 27 minutes
 
 Start the build process using all available CPU cores:
