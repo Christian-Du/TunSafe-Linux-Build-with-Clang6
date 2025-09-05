@@ -114,6 +114,15 @@ After the build completes successfully, install Clang system-wide:
 sudo make install
 ```
 
+Verify that Clang 6.0 is properly installed:
+```bash
+$ clang --version
+clang version 6.0.1 
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/local/bin
+```
+
 ## Step 6: Download and Build TunSafe
 
 Now we continue with a modified version of the [official TunSafe Linux guide](https://tunsafe.com/user-guide/linux).
@@ -122,15 +131,6 @@ Download TunSafe source code:
 ```bash
 git clone https://github.com/TunSafe/TunSafe.git
 cd TunSafe
-```
-
-Verify that Clang 6.0 is properly installed:
-```bash
-$ clang --version
-clang version 6.0.1 
-Target: x86_64-unknown-linux-gnu
-Thread model: posix
-InstalledDir: /usr/local/bin
 ```
 
 ## Step 7: Fix TunSafe Build Script
